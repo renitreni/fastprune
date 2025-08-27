@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Livewire\Component;
@@ -21,6 +22,10 @@ class UploaderComponentLivewire extends Component
         ]);
     }
 
+    public function render()
+    {
+        return view('livewire.uploader-component-livewire');
+    }
     public function save()
     {
         $this->validate([
@@ -46,6 +51,10 @@ class UploaderComponentLivewire extends Component
         }
 
         $fileName = time() . '.jpg';
+
+        // Clean up storage before saving new file
+        $this->cleanupStorage();
+
         Storage::disk('public')->put($fileName, $encoded);
 
         $this->downloadUrl = Storage::disk('public')->url($fileName);
@@ -58,8 +67,73 @@ class UploaderComponentLivewire extends Component
         $this->reset('image');
     }
 
-    public function render()
+    /**
+     * Clean up storage to keep it under 1GB
+     */
+    private function cleanupStorage()
     {
-        return view('livewire.uploader-component-livewire');
+        $disk = Storage::disk('public');
+        $maxSizeBytes = 1024 * 1024 * 1024; // 1GB in bytes
+
+        // Get all files with their details
+        $files = collect($disk->allFiles())
+            ->filter(function ($file) use ($disk) {
+                // Only process image files (optional - adjust extensions as needed)
+                return in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+            })
+            ->map(function ($file) use ($disk) {
+                return [
+                    'path' => $file,
+                    'size' => $disk->size($file),
+                    'timestamp' => $disk->lastModified($file)
+                ];
+            })
+            ->sortBy('timestamp'); // Sort by oldest first
+
+        // Calculate total size
+        $totalSize = $files->sum('size');
+
+        // If under limit, no cleanup needed
+        if ($totalSize < $maxSizeBytes) {
+            return;
+        }
+
+        // Delete oldest files until we're under the limit
+        $sizeToRemove = $totalSize - $maxSizeBytes;
+        $removedSize = 0;
+
+        foreach ($files as $file) {
+            if ($removedSize >= $sizeToRemove) {
+                break;
+            }
+
+            try {
+                $disk->delete($file['path']);
+                $removedSize += $file['size'];
+
+                // Log the deletion (optional)
+                Log::info("Deleted old file: {$file['path']} ({$this->formatBytes($file['size'])})");
+            } catch (\Exception $e) {
+                // Log error but continue with cleanup
+                Log::error("Failed to delete file: {$file['path']} - " . $e->getMessage());
+            }
+        }
+
+        // Log cleanup summary
+        Log::info("Storage cleanup completed. Removed {$this->formatBytes($removedSize)} of data.");
+    }
+
+    /**
+     * Format bytes into human readable format
+     */
+    private function formatBytes($bytes, $precision = 2)
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+        for ($i = 0; $bytes >= 1024 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, $precision) . ' ' . $units[$i];
     }
 }
