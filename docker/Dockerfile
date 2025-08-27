@@ -30,6 +30,8 @@ RUN apt-get update && apt-get install -y \
     php8.3-pcov \
     php8.3-xdebug \
     php8.3-imap \
+    php8.3-imagick \
+    imagemagick \
     cron \
     supervisor \
     unzip \
