@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="row justify-content-md-center">
-                        <div class="my-auto mx-2 col-md-12">
+                        <div class="my-auto mx-2 col-md-auto">
                             <div wire:loading wire:target="image">
                                 <div class="spinner-border" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -49,11 +49,11 @@
                             </div>
 
                             @if ($downloadUrl)
-                                <div class="mt-4">
+                                <div class="mt-4 d-flex justify-content-center">
                                     <h4>Image processed successfully!</h4>
-                                    <a href="{{ $downloadUrl }}" target="_blank" class="btn btn-success">Download
-                                        Optimized
-                                        Image</a>
+                                    <a href="{{ $downloadUrl }}" target="_blank" class="btn btn-success">
+                                        Download Optimized Image
+                                    </a>
                                 </div>
                             @endif
                         </div>
