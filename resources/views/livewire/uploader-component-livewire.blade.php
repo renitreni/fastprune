@@ -39,21 +39,26 @@
                         </div>
                     </div>
 
-                    <div wire:loading wire:target="image">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                    <div class="row justify-content-md-center">
+                        <div class="my-auto mx-2 col-md-12">
+                            <div wire:loading wire:target="image">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <span>Uploading and processing...</span>
+                            </div>
+
+                            @if ($downloadUrl)
+                                <div class="mt-4">
+                                    <h4>Image processed successfully!</h4>
+                                    <a href="{{ $downloadUrl }}" target="_blank" class="btn btn-success">Download
+                                        Optimized
+                                        Image</a>
+                                </div>
+                            @endif
                         </div>
-                        <span>Uploading and processing...</span>
                     </div>
                 </form>
-
-                @if ($downloadUrl)
-                    <div class="mt-4">
-                        <h4>Image processed successfully!</h4>
-                        <a href="{{ $downloadUrl }}" target="_blank" class="btn btn-success">Download Optimized
-                            Image</a>
-                    </div>
-                @endif
             </div>
         </div>
         <div class="tab-pane fade" id="zip" role="tabpanel" aria-labelledby="profile-tab">
