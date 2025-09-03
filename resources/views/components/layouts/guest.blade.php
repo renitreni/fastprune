@@ -6,19 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Primary Meta Tags -->
-    <title>{{ config('app.name', 'Laravel') }} - Compress Images & Files Online | Fast & Free File Compression</title>
+    <title>{{ config('app.name') }} - Fast & Free File Compression Online</title>
+
     <meta name="title"
         content="{{ config('app.name', 'Laravel') }} - Compress Images & Files Online | Fast & Free File Compression">
     <meta name="description"
-        content="Compress images and files online for free. Reduce file sizes by up to 80% without losing quality. Fast, secure, and easy-to-use file compression tool.">
+        content="Compress images, PDFs & files online for free. Reduce size by 80% without quality loss. No signup required - start compressing now!">
     <meta name="keywords"
-        content="image compression, file compression, reduce file size, optimize images, compress PDF, online compressor, file optimizer">
-    <meta name="author" content="{{ config('app.name', 'Laravel') }}">
+        content="compress files online, image compressor, PDF compressor, reduce file size, optimize images, free compression tool">
+    <meta name="author" content="{{ config('app.name') }}">
+    <meta name="publisher" content="{{ config('app.name') }}">
     <meta name="robots" content="index, follow">
+    <meta name="last-modified" content="{{ now()->toISOString() }}">
+    <link rel="alternate" hreflang="en" href="{{ url('/') }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
+    <meta property="og:image:alt" content="File compression tool interface showing before and after file sizes">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ config('app.name', 'Laravel') }} - Compress Images & Files Online">
     <meta property="og:description"
@@ -30,6 +35,7 @@
     <meta property="og:locale" content="{{ app()->getLocale() }}">
 
     <!-- Twitter -->
+    <meta name="twitter:site" content="@yourhandle">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="{{ config('app.name', 'Laravel') }} - Compress Images & Files Online">
@@ -72,6 +78,18 @@
     <!-- Main CSS File -->
     <link href="{{ asset('vendor/theme/assets/css/main.css') }}" rel="stylesheet">
 
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+    <link rel="preload" href="{{ asset('vendor/theme/assets/css/main.css') }}" as="style">
+    <link rel="preload" href="{{ asset('vendor/theme/assets/img/hero-bg-2.jpg') }}" as="image">
+
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    
     <!-- Structured Data -->
     <!-- Structured Data -->
     <script type="application/ld+json">
